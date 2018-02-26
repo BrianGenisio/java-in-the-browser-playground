@@ -20,7 +20,9 @@ class IDE extends Component<Props, State> {
     compile() {
         const {code} = this.state;
 
-        compile(code).then(alert);
+        compile(code)
+            .then(console.log)
+            .catch(console.log);
     }
 
     render() {
