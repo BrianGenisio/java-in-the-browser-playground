@@ -46,12 +46,12 @@ function waitForResponse(
     return result;
 }
 
-function isMessage(data: any) {
+function isWorkerMessage(data: any) {
     return 'id' in data && typeof data.id === 'string';
 }
 
 function receiveMessageFromWorker(event: any) {
-    if (!isMessage(event.data)) {
+    if (!isWorkerMessage(event.data)) {
         return;
     }
 
@@ -77,10 +77,27 @@ function receiveMessageFromWorker(event: any) {
     }
 }
 
+function receiveMessageFromWWindow(event: any) {
+    const messageString = event.data;
+
+    if ((typeof messageString) !== "string") {
+        return;
+    }
+
+    try {
+        const message = JSON.parse(messageString);
+        if (message.command === "stdout") {
+            console.log(message.line);
+        }
+    } catch(e) {
+    }
+}
+
 export function init(): Promise<any> {
     worker = new Worker("worker.js");
 
     worker.addEventListener("message", receiveMessageFromWorker);
+    window.addEventListener("message", receiveMessageFromWWindow);
 
     const message = postMessage("load-classlib", {
         url: "classlib.txt",
