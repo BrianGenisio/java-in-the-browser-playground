@@ -18,7 +18,7 @@
 
 .ide-container .ide-editor textarea {
     width: 100%;
-    height: 30em;
+    height: 15em;
 }
 
 .ide-container .ide-execution {

@@ -121,6 +121,7 @@ function reportProgress(data: any) {
             // for things wrong with the code, not compilation diagnostic
             // eg "Main method not found"
             reportDiagnostic(data);
+            break;
 
         default:
             console.log("Unrecognized command: " + data.command);

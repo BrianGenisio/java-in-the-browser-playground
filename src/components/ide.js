@@ -1,31 +1,42 @@
 //@flow
 import React, { Component } from 'react';
 import "./ide.css";
-import Editor from './editor.js';
+
 import {compile} from '../engine/compile-java.js';
+
+import Editor from './editor.js';
+import Executor from './executor.js';
 
 type Props = {
 
 };
 
 type State = {
-    code: string
+    code: string,
+    compiled: string
 };
 
 class IDE extends Component<Props, State> {
     state = {
-        code: ""
+        code: "",
+        compiled: ""
     }
 
     compile() {
         const {code} = this.state;
 
+        this.setState({compiled: ""});
+
         compile(code)
-            .then(console.log)
+            .then(compiled => {
+                this.setState({compiled});
+            })
             .catch(console.log);
     }
 
     render() {
+        const {compiled} = this.state;
+
         return <div className="ide-container">
             <div className="ide-commands">
                 <button
@@ -39,7 +50,7 @@ class IDE extends Component<Props, State> {
             </div>
 
             <div className="ide-execution">
-                EXECUTE
+                <Executor code={compiled} />
             </div>
 
             <div className="ide-console">
